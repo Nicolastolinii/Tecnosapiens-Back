@@ -22,4 +22,43 @@ public class Blog implements Serializable {
     @Column(name = "autor_id")
     private Long autorId;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public LocalDateTime getTimeData() {
+        return timeData;
+    }
+
+    public void setTimeData(LocalDateTime timeData) {
+        this.timeData = timeData;
+    }
+
+    public Long getAutorId() {
+        return autorId;
+    }
+
+    public void setAutorId(Long autorId) {
+        this.autorId = autorId;
+    }
 }

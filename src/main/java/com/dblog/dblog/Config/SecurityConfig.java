@@ -3,6 +3,7 @@ package com.dblog.dblog.Config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +25,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests
                 (authRequest -> authRequest
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/blog/**").authenticated()
+                        .requestMatchers("/blog/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .build();
