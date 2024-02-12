@@ -35,6 +35,8 @@ public class PostServiceImpl implements PostService{
         if (existingBlog != null) {
             existingBlog.setTitulo(blog.getTitulo());
             existingBlog.setContenido(blog.getContenido());
+            existingBlog.setImagen(blog.getImagen());
+            existingBlog.setCategoria(blog.getCategoria());
             return blogRepo.save(existingBlog);
         } else {
             return null; // Blog no encontrado
