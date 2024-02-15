@@ -8,10 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +33,11 @@ public class BlogController {
 
             // Decodificar la imagen Base64
             byte[] imageData = Base64.getDecoder().decode(imageDataWithoutPrefix);
+            // Obtener la zona horaria de Argentina
+            ZoneId zonaHorariaArgentina = ZoneId.of("America/Argentina/Buenos_Aires");
+
+            // Obtener la fecha y hora actual en Argentina
+            ZonedDateTime horaActualArgentina = ZonedDateTime.now(zonaHorariaArgentina);
 
             // Crear un nuevo objeto de Blog
             Blog blog = new Blog();
@@ -42,7 +46,7 @@ public class BlogController {
             blog.setAutorId(blogRequest.getAutorId());
             blog.setCategoria(blogRequest.getCategoria());
             blog.setImagen(imageData);
-            blog.setTimeData(LocalDateTime.now());
+            blog.setTimeData(LocalDateTime.from(horaActualArgentina));
 
             // Guardar el blog en la base de datos
             postService.createBlog(blog);
