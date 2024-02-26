@@ -13,7 +13,7 @@ RUN mvn -f /home/app/pom.xml clean package
 #
 # Package stage
 #
-FROM openjdk:17-jre-slim
+FROM docker.io/library/openjdk:17-slim
 
 # Copy the application jar from build stage
 COPY --from=build /home/app/target/dblog-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
