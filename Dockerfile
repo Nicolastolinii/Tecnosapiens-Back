@@ -1,5 +1,4 @@
 # Base image for building the application
-FROM maven:4.0.0-jdk-11-slim AS build
 
 # Copy source code
 COPY src /home/app/src
