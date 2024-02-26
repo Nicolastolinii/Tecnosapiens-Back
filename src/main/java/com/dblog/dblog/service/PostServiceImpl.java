@@ -5,7 +5,10 @@ import com.dblog.dblog.repo.BlogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -17,6 +20,21 @@ public class PostServiceImpl implements PostService{
     @Override
     public Blog createBlog(Blog blog) {
         return blogRepo.save(blog);
+    }
+
+    @Override
+    public List<String> getAllCategory() {
+        // Obtener todos los blogs
+        List<Blog> blogs = blogRepo.findAll();
+
+        // Extraer las categorías únicas en un conjunto para evitar duplicados
+        Set<String> uniqueCategories = new HashSet<>();
+        for (Blog blog : blogs) {
+            uniqueCategories.add(blog.getCategoria());  // Asume que la propiedad "categoria" contiene la categoría del blog
+        }
+
+        // Convertir el conjunto a una lista y devolverla
+        return new ArrayList<>(uniqueCategories);
     }
 
     @Override

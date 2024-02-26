@@ -7,6 +7,9 @@ import java.util.List;
 public interface PostService {
     Blog createBlog(Blog blog);
 
+    List<String> getAllCategory();
+
+
     Blog getBlogById(Long blogId);
 
     List<Blog> getAllBlogs();

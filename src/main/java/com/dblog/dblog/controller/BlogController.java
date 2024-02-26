@@ -2,6 +2,7 @@ package com.dblog.dblog.controller;
 
 import com.dblog.dblog.model.Blog;
 import com.dblog.dblog.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,13 +64,19 @@ public class BlogController {
     }
 
     @GetMapping("/{blogId}")
-    public ResponseEntity<Blog> getBlogById(@PathVariable Long blogId) {
+    public ResponseEntity<Blog> getBlogById(@PathVariable Long blogId, HttpServletRequest request) {
         Blog blog = postService.getBlogById(blogId);
+
         if (blog != null) {
             return ResponseEntity.ok(blog);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/category")
+    public ResponseEntity<List<String>> getAllCategory(){
+        List<String> category = postService.getAllCategory();
+        return ResponseEntity.ok(category);
     }
     @GetMapping("/all")
     public ResponseEntity<List<Blog>> getAllBlogs() {
