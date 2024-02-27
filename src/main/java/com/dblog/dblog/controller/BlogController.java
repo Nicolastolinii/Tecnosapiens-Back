@@ -78,10 +78,7 @@ public class BlogController {
         List<String> category = postService.getAllCategory();
         return ResponseEntity.ok(category);
     }
-    @GetMapping("/")
-    public String getStatus() {
-        return "Application is up and running";
-    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Blog>> getAllBlogs() {
         List<Blog> blogs = postService.getAllBlogs();
