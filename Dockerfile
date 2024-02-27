@@ -1,9 +1,25 @@
+# Base image for building the application
+FROM openjdk:11-slim AS build
 
-FROM openjdk:21-ea-17-slim
+# Copy source code
+COPY ./dblog/src /home/app/src
 
-COPY --from=build target/dblog-0.0.1-SNAPSHOT.jar app.jar
+# Copy POM file
+COPY ./dblog/pom.xml /home/app
 
+# Build the project using Maven
+RUN mvn -f /home/app/pom.xml clean package
 
+#
+# Package stage
+#
+FROM openjdk:11-slim
+
+# Copy the application jar from build stage
+COPY --from=build /home/app/target/dblog-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
+
+# Expose port 8080
+EXPOSE 8080
 
 # Start the application using a Java JAR
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/demo.jar"]
