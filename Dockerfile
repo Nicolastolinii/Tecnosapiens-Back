@@ -2,10 +2,10 @@
 FROM openjdk:11-slim AS build
 
 # Copy source code
-COPY ./dblog/src /home/app/src
+COPY COPY ./src /home/app/src/
 
 # Copy POM file
-COPY ./dblog/pom.xml /home/app
+COPY ./pom.xml /home/app
 
 # Build the project using Maven
 RUN mvn -f /home/app/pom.xml clean package
