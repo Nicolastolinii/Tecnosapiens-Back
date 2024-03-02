@@ -1,11 +1,14 @@
 package com.dblog.dblog.service;
 
 import com.dblog.dblog.model.Blog;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface PostService {
     Blog createBlog(Blog blog);
+
+    String uploadImage(MultipartFile file) throws Exception;
 
     List<String> getAllCategory();
 

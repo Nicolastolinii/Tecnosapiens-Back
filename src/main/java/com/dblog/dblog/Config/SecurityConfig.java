@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/blog/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/blog/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
                                 .anyRequest().authenticated()
                 )

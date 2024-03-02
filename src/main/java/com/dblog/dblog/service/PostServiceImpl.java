@@ -4,11 +4,13 @@ import com.dblog.dblog.model.Blog;
 import com.dblog.dblog.repo.BlogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -21,6 +23,27 @@ public class PostServiceImpl implements PostService{
     public Blog createBlog(Blog blog) {
         return blogRepo.save(blog);
     }
+
+    @Override
+    public String uploadImage(MultipartFile file) throws Exception {
+      try {
+          String fileName = UUID.randomUUID().toString();
+          byte[] bytes = file.getBytes();
+          String fileOriginalName = file.getOriginalFilename();
+          String fileExt = fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
+          String newFileName = fileName + fileExt;
+          File folder = new File("src/main/resources/picture");
+          if (!folder.exists()){
+              folder.mkdir();
+          }
+          Path path = Paths.get("src/main/resources/picture/" + newFileName);
+          Files.write(path,bytes);
+          return path.toString();
+      }catch (Exception e){
+          throw new Exception(e.getMessage());
+      }
+    };
+
 
     @Override
     public List<String> getAllCategory() {

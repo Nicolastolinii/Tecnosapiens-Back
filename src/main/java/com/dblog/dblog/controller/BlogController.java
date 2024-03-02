@@ -2,6 +2,7 @@ package com.dblog.dblog.controller;
 
 import com.dblog.dblog.model.Blog;
 import com.dblog.dblog.service.PostService;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -19,33 +23,40 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/blog")
+@MultipartConfig
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class BlogController {
     @Autowired
     private PostService postService;
 
-    @PostMapping(value ="/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBlog(@RequestBody BlogRequest blogRequest) {
-        try {
-            // Obtener la cadena Base64 sin el prefijo
-            String imageDataWithPrefix = blogRequest.getImageBase64();
-            String imageDataWithoutPrefix = imageDataWithPrefix.substring(imageDataWithPrefix.indexOf(',') + 1);
+    @PostMapping(value = "/img")
+    public ResponseEntity<?> uploadimg(@RequestParam("file") MultipartFile file) throws Exception {
+      String cualquiercosa =  postService.uploadImage(file);
+      return ResponseEntity.ok("todo ok capo");
+    };
 
-            // Decodificar la imagen Base64
-            byte[] imageData = Base64.getDecoder().decode(imageDataWithoutPrefix);
+    @PostMapping(value ="/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createBlog(@RequestParam("file") MultipartFile file,
+                                        @RequestParam("titulo") String titulo,
+                                        @RequestParam("contenido") String contenido,
+                                        @RequestParam("autorId") Long autorId,
+                                        @RequestParam("categoria") String categoria) {
+        try {
+            // Obtén la imagen directamente como bytes desde la solicitud
+            String imageData = postService.uploadImage(file);
+
+            //**************************************//
             // Obtener la zona horaria de Argentina
             ZoneId zonaHorariaArgentina = ZoneId.of("America/Argentina/Buenos_Aires");
-
-            // Obtener la fecha y hora actual en Argentina
             ZonedDateTime horaActualArgentina = ZonedDateTime.now(zonaHorariaArgentina);
-
+            //*************************************//
             // Crear un nuevo objeto de Blog
             Blog blog = new Blog();
-            blog.setTitulo(blogRequest.getTitulo());
-            blog.setContenido(blogRequest.getContenido());
-            blog.setAutorId(blogRequest.getAutorId());
-            blog.setCategoria(blogRequest.getCategoria());
+            blog.setTitulo(titulo);
+            blog.setContenido(contenido);
+            blog.setAutorId(autorId);
+            blog.setCategoria(categoria);
             blog.setImagen(imageData);
             blog.setTimeData(LocalDateTime.from(horaActualArgentina));
 

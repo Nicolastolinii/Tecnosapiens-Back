@@ -5,7 +5,16 @@ public class BlogRequest {
     private String contenido;
     private Long autorId;
     private String categoria;
+    private byte[] image;
 
+
+
+    public byte[] getImage() {
+        return image;
+    }
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
     public String getTitulo() {
         return titulo;
     }
@@ -38,15 +47,6 @@ public class BlogRequest {
         this.categoria = categoria;
     }
 
-    public String getImageBase64() {
-        return imageBase64;
-    }
-
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
-    }
-
-    private String imageBase64;
 
     // Getters y setters
 }

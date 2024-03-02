@@ -23,16 +23,19 @@ public class Blog implements Serializable {
     private Long autorId;
 
     @Lob
-    @Column(name = "imagen", columnDefinition = "MEDIUMBLOB", nullable = false)
-    private byte[] imagen;
+    @Column(name = "imagen")
+    private String imagen;
 
-    public byte[] getImagen() {
+    public String getImagen() {
         return imagen;
     }
-
-    public void setImagen(byte[] imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+
+
+
 
     public String getCategoria() {
         return categoria;
