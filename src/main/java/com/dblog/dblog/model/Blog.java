@@ -1,7 +1,9 @@
 package com.dblog.dblog.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "blog" )
+@AllArgsConstructor
+@NoArgsConstructor
 public class Blog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,76 +21,20 @@ public class Blog implements Serializable {
     private String titulo;
     @Column(name = "contenido", nullable = false, columnDefinition = "TEXT")
     private String contenido;
+
+
+    @Column(name = "views")
+    private Integer view;
+
     @Column(name = "time_data", nullable = false)
     private LocalDateTime timeData;
     @Column(name = "autor_id")
     private Long autorId;
 
+    @Column(name = "categoria", nullable = false)
+    private String categoria;
     @Lob
     @Column(name = "imagen")
     private String imagen;
 
-    public String getImagen() {
-        return imagen;
-    }
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
-
-
-
-
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    @Column(name = "categoria", nullable = false)
-    private String categoria;
-
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
-
-    public LocalDateTime getTimeData() {
-        return timeData;
-    }
-
-    public void setTimeData(LocalDateTime timeData) {
-        this.timeData = timeData;
-    }
-
-    public Long getAutorId() {
-        return autorId;
-    }
-
-    public void setAutorId(Long autorId) {
-        this.autorId = autorId;
-    }
 }

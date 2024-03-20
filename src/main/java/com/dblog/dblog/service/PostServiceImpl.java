@@ -24,6 +24,7 @@ public class PostServiceImpl implements PostService{
         return blogRepo.save(blog);
     }
 
+
     @Override
     public String uploadImage(MultipartFile file) throws Exception {
       try {
@@ -32,11 +33,11 @@ public class PostServiceImpl implements PostService{
           String fileOriginalName = file.getOriginalFilename();
           String fileExt = fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
           String newFileName = fileName + fileExt;
-          File folder = new File("src/main/resources/picture");
+          File folder = new File("/root/app/image");
           if (!folder.exists()){
               folder.mkdir();
           }
-          Path path = Paths.get("src/main/resources/picture/" + newFileName);
+          Path path = Paths.get("/root/app/image/" + newFileName);
           Files.write(path,bytes);
           return path.toString();
       }catch (Exception e){
@@ -47,17 +48,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<String> getAllCategory() {
-        // Obtener todos los blogs
-        List<Blog> blogs = blogRepo.findAll();
-
-        // Extraer las categorías únicas en un conjunto para evitar duplicados
-        Set<String> uniqueCategories = new HashSet<>();
-        for (Blog blog : blogs) {
-            uniqueCategories.add(blog.getCategoria());  // Asume que la propiedad "categoria" contiene la categoría del blog
-        }
-
-        // Convertir el conjunto a una lista y devolverla
-        return new ArrayList<>(uniqueCategories);
+        return new ArrayList<>(blogRepo.findDistinctCategoria());
     }
 
     @Override
@@ -70,6 +61,20 @@ public class PostServiceImpl implements PostService{
         return blogRepo.findAll();
     }
 
+    @Override
+    public  Blog updateView(Long blogId, Blog blog) {
+        Blog existingBlog = blogRepo.findById(blogId).orElse(null);
+        if (existingBlog != null){
+            if (existingBlog.getView() != null){
+                existingBlog.setView(existingBlog.getView() + 1);
+            }else {
+                existingBlog.setView(+1);
+            }
+            return blogRepo.save(existingBlog);
+        }else {
+            return null;
+        }
+    }
     @Override
     public Blog updateBlog(Long blogId, Blog blog) {
         Blog existingBlog = blogRepo.findById(blogId).orElse(null);

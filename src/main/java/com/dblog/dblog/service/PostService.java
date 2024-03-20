@@ -15,7 +15,11 @@ public interface PostService {
 
     Blog getBlogById(Long blogId);
 
+
+
     List<Blog> getAllBlogs();
+
+    Blog updateView(Long blogId, Blog blog);
 
     Blog updateBlog(Long blogId, Blog blog);
 

@@ -1,6 +1,7 @@
 package com.dblog.dblog.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "blog_user" )
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,36 +23,4 @@ public class User implements Serializable {
 
     private String password;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getuser() {
-        return user;
-    }
-
-    public void setuser(String user) {
-        this.user = user;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getpassword() {
-        return password;
-    }
-
-    public void setpassword(String password) {
-        this.password = password;
-    }
 }

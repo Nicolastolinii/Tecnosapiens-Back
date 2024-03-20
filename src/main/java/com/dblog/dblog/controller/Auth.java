@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"})
 @AllArgsConstructor
 public class Auth {
     @Autowired

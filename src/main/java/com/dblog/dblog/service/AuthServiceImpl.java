@@ -4,16 +4,13 @@ import com.dblog.dblog.model.User;
 import com.dblog.dblog.repo.UserRepo;
 import com.dblog.dblog.security.JwtTokenProvider;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.util.Date;
 
 @Service
@@ -30,18 +27,14 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public String authenticateUser(User user){
-        User storedUser = userRepo.findByUserAndPassword(user.getuser(), user.getpassword());
+        User storedUser = userRepo.findByUserAndPassword(user.getUser(), user.getPassword());
         if (storedUser == null) throw new BadCredentialsException("Credenciales inválidas");
-        // Generar una clave segura para HS512
-        //Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-        // Generar token JWT
         String token = Jwts.builder()
-                .setSubject(storedUser.getuser())
+                .setSubject(storedUser.getUser())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(jwtTokenProvider.getKey())
                 .compact();
-
         return token;
     }
 
