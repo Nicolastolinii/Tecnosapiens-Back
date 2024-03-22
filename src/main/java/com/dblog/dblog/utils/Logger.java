@@ -29,16 +29,20 @@ public class Logger {
         LocalDateTime now = LocalDateTime.now();
         String formattedTime = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         String formattedLevel = String.format("[ %s - %s ]", formattedTime, level);
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        StackTraceElement caller = stackTrace[3];
+        String sourceFile = caller.getFileName() + ":" + caller.getLineNumber();
+        String formattedMessage = String.format("%s ==> %s", formattedLevel, message);
 
         switch (level) {
             case INFO:
-                printColoredMessage(YELLOW, formattedLevel, message);
+                printColoredMessage(YELLOW, formattedMessage, sourceFile);
                 break;
             case ERROR:
-                printColoredMessage(RED, formattedLevel, message);
+                printColoredMessage(RED, formattedMessage, sourceFile);
                 break;
             case WARNING:
-                printColoredMessage(WHITE, formattedLevel, message);
+                printColoredMessage(WHITE, formattedMessage, sourceFile);
                 break;
         }
     }

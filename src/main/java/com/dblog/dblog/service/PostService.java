@@ -1,6 +1,7 @@
 package com.dblog.dblog.service;
 
 import com.dblog.dblog.model.Blog;
+import com.dblog.dblog.model.dtos.BlogDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface PostService {
 
 
 
-    List<Blog> getAllBlogs();
+    List<BlogDto> getAllBlogs();
 
     Blog updateView(Long blogId, Blog blog);
 

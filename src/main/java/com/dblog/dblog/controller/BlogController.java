@@ -2,45 +2,46 @@ package com.dblog.dblog.controller;
 
 import com.dblog.dblog.model.Blog;
 import com.dblog.dblog.model.IpView;
-import com.dblog.dblog.service.CookieCleanService;
+import com.dblog.dblog.model.User;
+import com.dblog.dblog.model.dtos.BlogDto;
+import com.dblog.dblog.repo.UserRepo;
 import com.dblog.dblog.service.IpViewService;
 import com.dblog.dblog.service.PostService;
+import com.dblog.dblog.utils.LogDuration;
 import com.dblog.dblog.utils.Logger;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/blog")
 @MultipartConfig
-@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"},allowCredentials = "true")
-//@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"},allowCredentials = "true")
+@CrossOrigin(origins = "*")
 
 @AllArgsConstructor
 public class BlogController {
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserRepo userRepo;
     @Autowired
     private IpViewService ipViewService;
 
@@ -85,18 +86,25 @@ public class BlogController {
                                         @RequestParam("categoria") String categoria,
                                         HttpServletRequest request) {
         try {
-            String imageData = postService.uploadImage(file);
-            String imageUrl = "https://api.tecnosapiens.blog" + "/blog/image/" + FilenameUtils.getName(imageData);
+            //String imageData = postService.uploadImage(file);
+            //String imageUrl = "https://api.tecnosapiens.blog" + "/blog/image/" + FilenameUtils.getName(imageData);
+            String imageUrl ="imagen";
             //**************************************//
             ZoneId zonaHorariaArgentina = ZoneId.of("America/Argentina/Buenos_Aires");
             ZonedDateTime horaActualArgentina = ZonedDateTime.now(zonaHorariaArgentina);
             //*************************************//
+            Optional<User> optionalUser = userRepo.findById(autorId);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+            User user = optionalUser.get();
             Blog blog = new Blog();
             blog.setTitulo(titulo);
             blog.setContenido(contenido);
             blog.setAutorId(autorId);
             blog.setCategoria(categoria);
             blog.setImagen(imageUrl);
+            blog.setAutor(user.getUser());
             blog.setTimeData(LocalDateTime.from(horaActualArgentina));
             postService.createBlog(blog);
             //*************************************//
@@ -108,6 +116,8 @@ public class BlogController {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Post creado exitosamente.");
             response.put("imageUrl", imageUrl);
+            logger.log(Logger.LogLevel.INFO,("BLOG: " + blog));
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.log(Logger.LogLevel.ERROR,e.getMessage());
@@ -181,8 +191,10 @@ public class BlogController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Blog>> getAllBlogs() {
-        List<Blog> blogs = postService.getAllBlogs();
+    public ResponseEntity<List<BlogDto>> getAllBlogs() {
+        long start = System.currentTimeMillis();
+        List<BlogDto> blogs = postService.getAllBlogs();
+        LogDuration.logDuration("getAllBlogs()", Duration.ofMillis(System.currentTimeMillis()-start), blogs.size());
         return ResponseEntity.ok(blogs);
     }
     @PutMapping("/update/{blogId}")

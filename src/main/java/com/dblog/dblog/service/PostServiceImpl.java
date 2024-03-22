@@ -1,6 +1,7 @@
 package com.dblog.dblog.service;
 
 import com.dblog.dblog.model.Blog;
+import com.dblog.dblog.model.dtos.BlogDto;
 import com.dblog.dblog.repo.BlogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,8 +58,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Blog> getAllBlogs() {
-        return blogRepo.findAll();
+    public List<BlogDto> getAllBlogs() {
+        return blogRepo.findAllBlogDtos();
     }
 
     @Override

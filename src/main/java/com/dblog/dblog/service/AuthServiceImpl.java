@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService{
@@ -29,7 +31,11 @@ public class AuthServiceImpl implements AuthService{
     public String authenticateUser(User user){
         User storedUser = userRepo.findByUserAndPassword(user.getUser(), user.getPassword());
         if (storedUser == null) throw new BadCredentialsException("Credenciales inválidas");
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", storedUser.getId());
+        claims.put("username", storedUser.getUser());
         String token = Jwts.builder()
+                .setClaims(claims)
                 .setSubject(storedUser.getUser())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))

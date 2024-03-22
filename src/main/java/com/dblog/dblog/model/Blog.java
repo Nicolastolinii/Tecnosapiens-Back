@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -21,8 +24,6 @@ public class Blog implements Serializable {
     private String titulo;
     @Column(name = "contenido", nullable = false, columnDefinition = "TEXT")
     private String contenido;
-
-
     @Column(name = "views")
     private Integer view;
 
@@ -36,5 +37,11 @@ public class Blog implements Serializable {
     @Lob
     @Column(name = "imagen")
     private String imagen;
+
+
+    @Column(name = "autor_user")
+    private String autor;
+    @Column(name = "autor_img")
+    private String autorImg;
 
 }

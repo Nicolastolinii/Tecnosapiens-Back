@@ -21,29 +21,6 @@ public class IpView implements Serializable {
     @Column(name = "ipaddress" ,nullable = false)
     private String ipaddress;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getIpaddress() {
-        return ipaddress;
-    }
-
-    public void setIpaddress(String ipaddress) {
-        this.ipaddress = ipaddress;
-    }
-
-    public Long getPostid() {
-        return postid;
-    }
-
-    public void setPostid(Long postid) {
-        this.postid = postid;
-    }
 
     @Column(nullable = false)
     private Long postid;
