@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,5 +24,7 @@ public class User implements Serializable {
 
     private String password;
 
+    @OneToMany(mappedBy = "autorId", cascade = CascadeType.ALL)
+    private List<Blog> blogs;
 
 }

@@ -4,9 +4,11 @@ import com.dblog.dblog.model.Blog;
 import com.dblog.dblog.model.IpView;
 import com.dblog.dblog.model.User;
 import com.dblog.dblog.model.dtos.BlogDto;
+import com.dblog.dblog.model.dtos.UserDto;
 import com.dblog.dblog.repo.UserRepo;
 import com.dblog.dblog.service.IpViewService;
 import com.dblog.dblog.service.PostService;
+import com.dblog.dblog.service.UserService;
 import com.dblog.dblog.utils.LogDuration;
 import com.dblog.dblog.utils.Logger;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -42,6 +44,8 @@ public class BlogController {
     private PostService postService;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private UserService userService;
     @Autowired
     private IpViewService ipViewService;
 
@@ -211,5 +215,14 @@ public class BlogController {
         postService.deleteBlog(blogId);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
+        long start = System.currentTimeMillis();
+        UserDto user = userService.getUserById(userId);
+        LogDuration.logDuration("getUser()", Duration.ofMillis(System.currentTimeMillis()-start), user.getBlogs().size());
+        return ResponseEntity.ok(user);
+    }
+
+
 
 }
