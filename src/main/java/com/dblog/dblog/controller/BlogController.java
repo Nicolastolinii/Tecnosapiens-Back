@@ -2,10 +2,10 @@ package com.dblog.dblog.controller;
 
 import com.dblog.dblog.model.Blog;
 import com.dblog.dblog.model.IpView;
-import com.dblog.dblog.model.User;
+
 import com.dblog.dblog.model.dtos.BlogDto;
 import com.dblog.dblog.model.dtos.UserDto;
-import com.dblog.dblog.repo.UserRepo;
+
 import com.dblog.dblog.service.IpViewService;
 import com.dblog.dblog.service.PostService;
 import com.dblog.dblog.service.UserService;
@@ -43,8 +43,6 @@ public class BlogController {
     @Autowired
     private PostService postService;
     @Autowired
-    private UserRepo userRepo;
-    @Autowired
     private UserService userService;
     @Autowired
     private IpViewService ipViewService;
@@ -56,26 +54,19 @@ public class BlogController {
     @GetMapping("/image/{fileName}")
     public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
         try {
-            // Construir la ruta del archivo
             Path imagePath = Paths.get(IMAGE_DIR + fileName);
             File file = imagePath.toFile();
-            // Verificar si el archivo existe
             if (file.exists()) {
-                // Cargar el recurso de la imagen
                 Resource resource = new UrlResource(file.toURI());
-                // Configurar el encabezado de la respuesta para que el navegador pueda mostrar la imagen correctamente
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-                // Devolver la respuesta con el recurso de la imagen
                 return ResponseEntity.ok()
                         .headers(headers)
                         .body(resource);
             } else {
-                // Si el archivo no existe, devolver un ResponseEntity not found
                 return ResponseEntity.notFound().build();
             }
         } catch (IOException e) {
-            // Manejar cualquier excepción que pueda ocurrir al cargar la imagen
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -97,11 +88,10 @@ public class BlogController {
             ZoneId zonaHorariaArgentina = ZoneId.of("America/Argentina/Buenos_Aires");
             ZonedDateTime horaActualArgentina = ZonedDateTime.now(zonaHorariaArgentina);
             //*************************************//
-            Optional<User> optionalUser = userRepo.findById(autorId);
-            if (optionalUser.isEmpty()) {
+            UserDto user = userService.getUserByIdPost(autorId);
+            if (user != null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
-            User user = optionalUser.get();
             Blog blog = new Blog();
             blog.setTitulo(titulo);
             blog.setContenido(contenido);
@@ -215,13 +205,7 @@ public class BlogController {
         postService.deleteBlog(blogId);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
-        long start = System.currentTimeMillis();
-        UserDto user = userService.getUserById(userId);
-        LogDuration.logDuration("getUser()", Duration.ofMillis(System.currentTimeMillis()-start), user.getBlogs().size());
-        return ResponseEntity.ok(user);
-    }
+
 
 
 
