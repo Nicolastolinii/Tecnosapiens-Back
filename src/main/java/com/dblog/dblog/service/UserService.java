@@ -9,12 +9,20 @@ import java.util.List;
 public interface UserService {
     User createUser(User user);
 
+    void validateUser(Long userId)throws Exception;
+
+    String verifyAccount(String email, String otp);
+    User updateUser(User user);
+
+    List<String> findAllEmails();
     List<UserDto> getAllUsers();
 
-    String uploadImage(MultipartFile file) throws Exception;
+    String uploadImage(MultipartFile file, Long userId) throws Exception;
 
 
     UserDto getUserById(Long userId);
+
+    User userById ( Long userId);
 
     UserDto getUserByIdPost(Long userId);
 

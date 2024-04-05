@@ -89,7 +89,7 @@ public class BlogController {
             ZonedDateTime horaActualArgentina = ZonedDateTime.now(zonaHorariaArgentina);
             //*************************************//
             UserDto user = userService.getUserByIdPost(autorId);
-            if (user != null) {
+            if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
             Blog blog = new Blog();

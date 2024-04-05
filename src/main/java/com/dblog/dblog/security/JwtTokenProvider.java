@@ -28,9 +28,6 @@ public class JwtTokenProvider {
     }
     public boolean validateJwtToken(String token) {
         try {
-            System.out.println("Validating token: " + token);
-
-            // Imprime la clave
             System.out.println("Key: " + Arrays.toString(key.getEncoded()));
             Jwts.parser().setSigningKey(key).parseClaimsJws(token);
             return true;

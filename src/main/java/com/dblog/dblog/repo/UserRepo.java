@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -17,7 +18,13 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.blogs WHERE u.id = :userId")
     User getUserWithBlogs(Long userId);
 
+    @Query("SELECT u.correo FROM User u")
+    List<String> findAllEmails();
+
     @Query("SELECT u FROM User u")
     List<User> findAllUsers();
 
+    Optional<User> findByCorreo(String email);
+    User findUserById(Long id);
+    User findByUser(String user);
 }

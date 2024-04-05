@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,6 +24,18 @@ public class User implements Serializable {
     private String correo;
 
     private String password;
+
+    private String image;
+
+    private String otp;
+
+    private LocalDateTime otpGeneratedTime;
+
+    private boolean emailValidated = false;
+
+    private boolean admin= false;
+
+    private boolean isValidated = false;
 
     @OneToMany(mappedBy = "autorId", cascade = CascadeType.ALL)
     private List<Blog> blogs;

@@ -4,10 +4,11 @@ import com.dblog.dblog.model.User;
 import com.dblog.dblog.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,10 +21,16 @@ public class Auth {
     private AuthService authService;
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
-        String response = authService.authenticateUser(user);
-        return ResponseEntity.ok(response);
-    }
+        try {
+            String response = authService.authenticateUser(user);
+            return ResponseEntity.ok(response);
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor");
+        }
 
+    }
 
 
 }
