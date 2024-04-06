@@ -29,6 +29,8 @@ public class User implements Serializable {
 
     private String otp;
 
+    private Integer otpRequestCount = 0;
+
     private LocalDateTime otpGeneratedTime;
 
     private boolean emailValidated = false;

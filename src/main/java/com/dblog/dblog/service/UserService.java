@@ -12,6 +12,7 @@ public interface UserService {
     void validateUser(Long userId)throws Exception;
 
     String verifyAccount(String email, String otp);
+    String regenerateOtp(String email);
     User updateUser(User user);
 
     List<String> findAllEmails();

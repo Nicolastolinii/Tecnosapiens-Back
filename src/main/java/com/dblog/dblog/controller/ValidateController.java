@@ -26,9 +26,16 @@ public class ValidateController {
 
     @PutMapping("/verify-account")
     public ResponseEntity<String> verifyAccount(@RequestParam String email,@RequestParam String otp){
-        return new ResponseEntity<>(userService.verifyAccount(email, otp),HttpStatus.OK);
+        if (userService.verifyAccount(email, otp) != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
     }
 
+    @PutMapping("/regenerate-otp")
+    public ResponseEntity<String> regenerateOtp(@RequestParam String email) {
+        return new ResponseEntity<>(userService.regenerateOtp(email), HttpStatus.OK);
+    }
     @PutMapping("/user-validate/{id}/acc")
     public ResponseEntity<String> validateUser(@PathVariable Long id) {
         try {

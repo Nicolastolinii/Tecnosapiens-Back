@@ -4,6 +4,8 @@ package com.dblog.dblog.service;
 import com.dblog.dblog.model.User;
 import com.dblog.dblog.model.dtos.UserDto;
 import com.dblog.dblog.repo.UserRepo;
+import com.dblog.dblog.utils.EmailUtil;
+import com.dblog.dblog.utils.GenerateOtp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
-
+    @Autowired
+    private EmailUtil emailUtil;
+    @Autowired
+    private GenerateOtp generateOtp;
     @Override
     public User createUser(User user) {
         return userRepo.save(user);
@@ -44,12 +49,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public String verifyAccount(String email, String otp){
         User user = userRepo.findByCorreo(email).orElseThrow(()-> new RuntimeException("No hay usuario con este Email!"));
-        if (user.getOtp().equals(otp) && Duration.between(user.getOtpGeneratedTime(), LocalDateTime.now()).getSeconds() < (60)){
-            user.setEmailValidated(true);
-            userRepo.save(user);
-            return "OTP verificado con exito!";
+        Integer currentCount = user.getOtpRequestCount();
+        user.setOtpRequestCount(currentCount + 1);
+        if (currentCount < 3){
+            if (user.getOtp().equals(otp) && Duration.between(user.getOtpGeneratedTime(), LocalDateTime.now()).getSeconds() < (60)){
+                user.setEmailValidated(true);
+                userRepo.save(user);
+                return "OTP verificado con exito!";
+            }
         }
-        return "Por favor volve a generar el OTP";
+        return null;
+    }
+    @Override
+    public  String regenerateOtp(String email){
+        User user = userRepo.findByCorreo(email).orElseThrow(()-> new RuntimeException("No hay usuario con este Email!"));
+        Integer currentCount = user.getOtpRequestCount();
+        if (currentCount > 3){
+            return null;
+        }
+        String otp = generateOtp.generate();
+        try {
+            emailUtil.sendOtpEmail(user.getCorreo(), otp);
+        }catch (Exception e){
+            throw new RuntimeException("No se pudo enviar el OTP, intentelo de nuevo.", e);
+        }
+        user.setOtp(otp);
+        user.setOtpGeneratedTime(LocalDateTime.now());
+        userRepo.save(user);
+        return "Email enviado...";
     }
     @Override
     public List<String> findAllEmails() {
