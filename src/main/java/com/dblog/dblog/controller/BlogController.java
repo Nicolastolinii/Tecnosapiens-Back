@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
@@ -35,8 +36,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/blog")
 @MultipartConfig
-//@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"},allowCredentials = "true")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"}, allowCredentials = "true")
+
 
 @AllArgsConstructor
 public class BlogController {
@@ -81,9 +82,9 @@ public class BlogController {
                                         @RequestParam("categoria") String categoria,
                                         HttpServletRequest request) {
         try {
-            //String imageData = postService.uploadImage(file);
-            //String imageUrl = "https://api.tecnosapiens.blog" + "/blog/image/" + FilenameUtils.getName(imageData);
-            String imageUrl ="imagen";
+            String imageData = postService.uploadImage(file);
+            String imageUrl = "https://api.tecnosapiens.blog" + "/blog/image/" + FilenameUtils.getName(imageData);
+            //String imageUrl ="imagen";
             //**************************************//
             ZoneId zonaHorariaArgentina = ZoneId.of("America/Argentina/Buenos_Aires");
             ZonedDateTime horaActualArgentina = ZonedDateTime.now(zonaHorariaArgentina);
@@ -99,6 +100,7 @@ public class BlogController {
             blog.setCategoria(categoria);
             blog.setImagen(imageUrl);
             blog.setAutor(user.getUser());
+            blog.setAutorImg(user.getImage());
             blog.setTimeData(LocalDateTime.from(horaActualArgentina));
             postService.createBlog(blog);
             //*************************************//

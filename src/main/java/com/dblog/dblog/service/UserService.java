@@ -16,6 +16,8 @@ public interface UserService {
     User updateUser(User user);
 
     List<String> findAllEmails();
+    List<String> findAllUserName();
+
     List<UserDto> getAllUsers();
 
     String uploadImage(MultipartFile file, Long userId) throws Exception;
@@ -24,6 +26,7 @@ public interface UserService {
     UserDto getUserById(Long userId);
 
     User userById ( Long userId);
+    User userByUser ( String user);
 
     UserDto getUserByIdPost(Long userId);
 

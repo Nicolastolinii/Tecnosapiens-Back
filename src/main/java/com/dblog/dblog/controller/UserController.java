@@ -34,8 +34,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 @MultipartConfig
-//@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"},allowCredentials = "true")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"})
+//@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class UserController {
 
@@ -49,7 +49,7 @@ public class UserController {
     private static final String IMAGE_DIR = "/root/app/image/userimg/";
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/data/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         long start = System.currentTimeMillis();
         UserDto user = userService.getUserById(userId);
@@ -71,7 +71,11 @@ public class UserController {
     @PostMapping("/user/register")
     public ResponseEntity<Void> registerUser(@RequestBody User user){
         List<String> emails = userService.findAllEmails();
+        List<String> userName = userService.findAllUserName();
         if (emails.contains(user.getCorreo())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        if (userName.contains(user.getUser())){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (user.getUser() == null || user.getUser().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
@@ -116,7 +120,7 @@ public class UserController {
                 return ResponseEntity.notFound().build();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+           e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

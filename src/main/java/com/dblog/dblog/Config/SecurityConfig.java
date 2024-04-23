@@ -31,12 +31,16 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/validate/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
+                                .requestMatchers("/validate/user-validate/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/v1/user/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/v1/user/**").permitAll()
+                                //USER
                                 .requestMatchers(HttpMethod.GET, "/v1/users/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/v1/users/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/v1/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/v1/users/**").authenticated()
+                                //BLOG
+                                .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/blog/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/blog/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/blog/**").authenticated()

@@ -12,14 +12,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService{
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private UserService userService;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
@@ -31,20 +35,21 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public String authenticateUser(User user){
-        User storedUser = userRepo.findByUser(user.getUser());
+        User storedUser = userService.userByUser(user.getUser());
+
         if (storedUser == null ) throw new BadCredentialsException("Credenciales inválidas");
         if (!storedUser.isEmailValidated()){
-            return "Email no validado.";
+            return null;
         }
         if (!storedUser.isValidated()) {
-            return "El usuario no está validado. Por favor, espere a que su cuenta sea validada por un administrador.";
+            return null;
         }
         if (!passwordEncoder.matches(user.getPassword(), storedUser.getPassword())) {
             throw new BadCredentialsException("Credenciales inválidas");
         }
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", storedUser.getId());
-        claims.put("username", storedUser.getUser());
+        claims.put("username", storedUser.getUserName());
         if (storedUser.isAdmin()) {
             claims.put("role", "ADMIN");
         }

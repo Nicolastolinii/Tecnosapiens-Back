@@ -83,14 +83,22 @@ public class UserServiceImpl implements UserService {
         return userRepo.findAllEmails();
     }
     @Override
+    public List<String> findAllUserName() {
+        return userRepo.findAllUserName();
+    }
+    @Override
     public String uploadImage(MultipartFile file, Long userId) throws Exception {
         try {
             User user = userRepo.findUserById(userId);
             if (user != null) {
                 String currentImageName = user.getImage();
                 if (currentImageName != null && !currentImageName.isEmpty()) {
-                    Path imagePath = Paths.get("/root/app/image/userimg/" + currentImageName);
-                    Files.deleteIfExists(imagePath);
+                    int index = currentImageName.lastIndexOf("user/") + 5;
+                    if (index > 5) {
+                        String fileName = currentImageName.substring(index);
+                        Path imagePath = Paths.get("/root/app/image/userimg/" + fileName);
+                        Files.deleteIfExists(imagePath);
+                    }
                 }
             }else {
                 throw new Exception("Usuario no encontrado con el ID: " + userId);
@@ -100,7 +108,7 @@ public class UserServiceImpl implements UserService {
             String fileOriginalName = file.getOriginalFilename();
             String fileExt = fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
             String newFileName = fileName + fileExt;
-            File folder = new File("/root/app/image/userimg/");
+            File folder = new File("/root/app/image/userimg");
             //File folder = new File("/img/");
             if (!folder.exists()){
                 folder.mkdir();
@@ -122,6 +130,10 @@ public class UserServiceImpl implements UserService {
     public User userById(Long userId){
         return userRepo.findUserById(userId);
     }
+    public User userByUser(String user){
+        return userRepo.findByUser(user);
+    }
+
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepo.findAllUsers();
@@ -140,6 +152,7 @@ public class UserServiceImpl implements UserService {
        User user = userRepo.getUserWithBlogs(userId);
         if (user != null){
             UserDto userDTO = new UserDto();
+            userDTO.setImage(user.getImage());
             userDTO.setId(user.getId());
             userDTO.setUser(user.getUser());
             userDTO.setBlogs(user.getBlogs());

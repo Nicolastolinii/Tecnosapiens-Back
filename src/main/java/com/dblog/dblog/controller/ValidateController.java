@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/validate")
 @MultipartConfig
-//@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"},allowCredentials = "true")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://www.tecnosapiens.blog", "https://tecnosapiens.blog"},allowCredentials = "true")
+//@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class ValidateController {
 

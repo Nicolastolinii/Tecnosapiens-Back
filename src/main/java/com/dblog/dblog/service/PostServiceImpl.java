@@ -29,9 +29,15 @@ public class PostServiceImpl implements PostService{
     @Override
     public String uploadImage(MultipartFile file) throws Exception {
       try {
+          if (file.isEmpty()) {
+              throw new Exception("File is empty");
+          }
           String fileName = UUID.randomUUID().toString();
           byte[] bytes = file.getBytes();
           String fileOriginalName = file.getOriginalFilename();
+          if (fileOriginalName == null || !fileOriginalName.contains(".")) {
+              throw new Exception("Invalid file name or extension.");
+          }
           String fileExt = fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
           String newFileName = fileName + fileExt;
           File folder = new File("/root/app/image");

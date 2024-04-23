@@ -20,6 +20,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query("SELECT u.correo FROM User u")
     List<String> findAllEmails();
+    @Query("SELECT u.user FROM User u")
+    List<String> findAllUserName();
 
     @Query("SELECT u FROM User u")
     List<User> findAllUsers();
