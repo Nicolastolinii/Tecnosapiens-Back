@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.getUserWithBlogs(userId);
         if (user != null){
             UserDto userDTO = new UserDto();
-            //userDTO.setImage(user.getImage());
+            userDTO.setImage(user.getImage());
             userDTO.setUser(user.getUser());
             return userDTO;
         }

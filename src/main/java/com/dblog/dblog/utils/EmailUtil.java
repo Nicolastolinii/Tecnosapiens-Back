@@ -32,7 +32,7 @@ public class EmailUtil {
                             <div style=" text-align: center; padding-bottom: 5.1rem;">
                                         <p style="font-size: 24px; padding-bottom: 2rem; font-weight: 700; color: white; margin-bottom: 20px;">¡Gracias por registrarse! Confirma tu dirección de correo electronico:</p>
                                         
-                                            <a href="http://localhost:8080/validate/verify-account?email=%s&otp=%s" target="_blank" style="text-decoration: none;  color: white; background-color: #F8A22D;  color: white; border: none; cursor: pointer; text-decoration: none; font-size: 18px; padding: 12px 20px; border-radius: 5px;">Click Aqui</a>
+                                            <a href="http://localhost:5173/validate/verify-account?email=%s&otp=%s" target="_blank" style="text-decoration: none;  color: white; background-color: #F8A22D;  color: white; border: none; cursor: pointer; text-decoration: none; font-size: 18px; padding: 12px 20px; border-radius: 5px;">Click Aqui</a>
                                         
                                     </div>
                             <span style="color: rgb(226, 226, 226);">*Luego de verificar el correo, tu cuenta tiene que ser habilitada por un administrador.</span>

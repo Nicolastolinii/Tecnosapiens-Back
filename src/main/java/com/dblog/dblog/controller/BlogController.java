@@ -82,8 +82,8 @@ public class BlogController {
                                         @RequestParam("categoria") String categoria,
                                         HttpServletRequest request) {
         try {
-            String imageData = postService.uploadImage(file);
-            String imageUrl = "https://api.tecnosapiens.blog" + "/blog/image/" + FilenameUtils.getName(imageData);
+            //String imageData = postService.uploadImage(file);
+            //String imageUrl = "https://api.tecnosapiens.blog" + "/blog/image/" + FilenameUtils.getName(imageData);
             //String imageUrl ="imagen";
             //**************************************//
             ZoneId zonaHorariaArgentina = ZoneId.of("America/Argentina/Buenos_Aires");
@@ -98,7 +98,7 @@ public class BlogController {
             blog.setContenido(contenido);
             blog.setAutorId(autorId);
             blog.setCategoria(categoria);
-            blog.setImagen(imageUrl);
+            blog.setImagen("IMAGEN");
             blog.setAutor(user.getUser());
             blog.setAutorImg(user.getImage());
             blog.setTimeData(LocalDateTime.from(horaActualArgentina));
@@ -111,7 +111,6 @@ public class BlogController {
             //*************************************//
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Post creado exitosamente.");
-            response.put("imageUrl", imageUrl);
             logger.log(Logger.LogLevel.INFO,("BLOG: " + blog));
 
             return ResponseEntity.ok(response);
