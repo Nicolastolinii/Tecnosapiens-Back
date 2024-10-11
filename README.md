@@ -217,7 +217,6 @@ Esta aplicación web permite a los usuarios crear y gestionar blogs, así como m
         "contenido": "Contenido del blog",
         "categoria": "Categoría"
       },
-      ...
     ]
     ```
 - **Ejemplo de Solicitud (cURL)**:
@@ -341,7 +340,7 @@ Esta aplicación web permite a los usuarios crear y gestionar blogs, así como m
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/tu_usuario/nombre_del_repositorio.git
+   git clone https://github.com/Nicolastolinii/Tecnosapiens-Back.git
 
 #### Configurar la base de datos:
 
